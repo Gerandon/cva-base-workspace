@@ -1,6 +1,6 @@
 {
     "name": "ngx-cva-base",
-    "version": "1.0.1-rc.2",
+    "version": "1.0.1-rc.3",
     "peerDependencies": {
         "@angular/common": "^14.1.0",
         "@angular/core": "^14.1.0",

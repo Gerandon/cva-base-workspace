@@ -1,24 +1,94 @@
 # NgxCvaBase
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
 
-## Code scaffolding
+## Short Description
+This is basically a utility-widget Angular library, for creating `ControlValueAccessors` in an easier way, by implementing and extending
+the `Core` classes.
 
-Run `ng generate component component-name --project ngx-cva-base` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-cva-base`.
-> Note: Don't forget to add `--project ngx-cva-base` or else it will be added to the default project in your `angular.json` file. 
+Instead of creating `ControlValueAccessor` implementations in each of our project, this library provides already defined classes for that functionality.
 
-## Build
+##Core Classes
 
-Run `ng build ngx-cva-base` to build the project. The build artifacts will be stored in the `dist/` directory.
+<table>
+    <thead>
+        <tr>
+            <th>File name</th>
+            <th>Class name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>base-value-accessor.ts</td>
+            <td>BaseValueAccessor</td>
+            <td>The main "core" class of the library. It contains the CVA interface implementations and handles the built-in "overridable" and redundant functionalities.</td>
+        </tr>
+        <tr>
+            <td>base.input.ts</td>
+            <td>BaseInput</td>
+            <td>Simple class that extends the BaseCVA class. It has multiple attributes inside of it, the most common ones such as: "name", "label", "appearance", etc. Extending this class in our component, makes our component to act like a custom control input.</td>
+        </tr>
+        <tr>
+            <td>base-text.input.ts</td>
+            <td>BaseTextInput</td>
+            <td>This class extends the BaseInput one. It has multiple attributes that are being used in case of "plain" text inputs, such as: "type (text or passwd)", "maxLength", etc.</td>
+        </tr>
+    </tbody>
+</table>
 
-## Publishing
+##Widgets (built-in examples)
+There are a few custom components, just to present how the core functionality and implementation works and makes
+the development easier (especially in case of a newly created project)
 
-After building your library with `ng build ngx-cva-base`, go to the dist folder `cd dist/ngx-cva-base` and run `npm publish`.
+In the following example you can see a custom CVA implementation built into the library (as widget)
 
-## Running unit tests
+As you can see, instead of defining what our CVA will look like, we could use the Base implementation from the core of the library. That way (as seen) our component will have significantly less code on its TS side and we also reduced redundancy as well.
+###BasicInput (component)
+```typescript
+@Component({
+    selector: 'basic-input',
+    templateUrl: './basic-input.component.html',
+    styleUrls: ['./basic-input.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => BasicInputComponent), multi: true},
+        {provide: NG_ASYNC_VALIDATORS, useExisting: forwardRef(() => BasicInputComponent), multi: true},
+    ],
+})
+export class BasicInputComponent extends BaseTextInput<string> implements OnInit {
 
-Run `ng test ngx-cva-base` to execute the unit tests via [Karma](https://karma-runner.github.io).
+    constructor(protected injector: Injector, protected cdr: ChangeDetectorRef) {
+        super(cdr, injector);
+    }
 
-## Further help
+    ngOnInit() {
+        super.ngOnInit();
+    }
+}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```angular2html
+<mat-form-field [floatLabel]="floatLabel && 'always'" [appearance]="appearance">
+    <mat-label *ngIf="label && floatLabel !== 'never'">{{ label | translate: translateParams }}</mat-label>
+    <input
+        #inputElement
+        #input="ngForm"
+        matInput
+        label=""
+        [type]="type"
+        [attr.disabled]="disabled"
+        [readonly]="disabled"
+        [placeholder]="placeholder | translate: translateParams"
+        [formControl]="control"
+        [maxLength]="maxLength"
+        [name]="name"
+        [required]="required"/>
+    <mat-icon *ngIf="icon" matPrefix color="primary">{{icon}}</mat-icon>
+    <span *ngIf="suffix" matSuffix>{{suffix}}</span>
+    <mat-error *ngIf="hasError('required')">{{ 'COMMON.REQUIRED' | translate: translateParams }}</mat-error>
+    <mat-error *ngIf="hasError('max')">{{ 'ERROR.NUMERIC.MAX' | translate }}</mat-error>
+    <mat-error *ngIf="hasError('min')">{{ 'ERROR.NUMERIC.MIN' | translate }}</mat-error>
+</mat-form-field>
+
+```
