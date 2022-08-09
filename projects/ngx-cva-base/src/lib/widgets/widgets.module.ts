@@ -8,7 +8,6 @@ import {MatSelectModule} from "@angular/material/select";
 import {TranslateModule} from "@ngx-translate/core";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
-import {IMaskModule} from "angular-imask";
 import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
@@ -24,7 +23,6 @@ import {MatInputModule} from "@angular/material/input";
         TranslateModule,
         ReactiveFormsModule,
         MatIconModule,
-        IMaskModule,
         MatInputModule
     ],
     exports: [
