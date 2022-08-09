@@ -1,6 +1,12 @@
 {
     "name": "ngx-cva-base",
-    "version": "1.0.1-rc.3",
+    "version": "1.0.1-rc.4",
+    "keywords": ["angular", "cva", "control_value_accessor", "widget"],
+    "homepage": "https://github.com/Gerandon/cva-base-workspace#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Gerandon/cva-base-workspace.git"
+    },
     "peerDependencies": {
         "@angular/common": "^14.1.0",
         "@angular/core": "^14.1.0",
